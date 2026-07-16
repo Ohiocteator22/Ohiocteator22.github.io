@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plugins — CornUi</title>
+<meta name="description" content="Official and experimental plugins for CornUi.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-deep:#12130f;
+    --bg-panel:#191b14;
+    --bg-panel-2:#1f221a;
+    --kernel:#f4c430;
+    --kernel-dim:#c79f22;
+    --husk:#7a8450;
+    --husk-light:#a3ac74;
+    --cream:#ede6d3;
+    --muted:#8b8a78;
+    --line:#2c2e22;
+    --radius:10px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
+  }
+  body{background:var(--bg-deep); color:var(--cream); font-family:'Inter',sans-serif; line-height:1.55;}
+  h1,h2,h3,.wordmark{font-family:'Space Grotesk',sans-serif;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+  a{color:inherit;}
+  .wrap{max-width:1080px; margin:0 auto; padding:0 1.5rem;}
+
+  header{
+    position:sticky; top:0; z-index:20;
+    background:rgba(18,19,15,0.85);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:1rem 1.5rem; max-width:1080px; margin:0 auto;
+  }
+  .wordmark{font-size:1.15rem; font-weight:700; display:flex; gap:2px;}
+  .wordmark em{font-style:normal; color:var(--kernel);}
+  .nav-links{display:none; gap:1.75rem; list-style:none;}
+  @media (min-width:640px){ .nav-links{display:flex;} }
+  .nav-links a{font-family:'JetBrains Mono',monospace; font-size:0.82rem; color:var(--muted); text-decoration:none; transition:color 0.2s ease;}
+  .nav-links a:hover{color:var(--kernel);}
+
+  .kernel-divider{display:flex; justify-content:center; gap:6px; padding:2.5rem 0;}
+  .kernel-divider span{width:6px; height:6px; border-radius:1px; background:var(--husk);}
+  .kernel-divider span:nth-child(3n){background:var(--kernel);}
+  .kernel-divider span:nth-child(4n){background:var(--kernel-dim);}
+
+  .page-head{padding:3.5rem 0 1rem;}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace; font-size:0.78rem; color:var(--husk-light);
+    text-transform:uppercase; letter-spacing:0.12em; margin-bottom:1rem;
+    display:flex; align-items:center; gap:0.6rem;
+  }
+  .eyebrow::before{content:''; width:8px; height:8px; background:var(--kernel); display:inline-block; border-radius:1px;}
+  .page-head h1{font-size:clamp(2rem,5vw,2.8rem); color:var(--cream); line-height:1.1;}
+  .page-head p{margin-top:1rem; color:var(--muted); max-width:52ch;}
+
+  section{padding:1rem 0 3rem;}
+
+  .plugin-grid{
+    display:grid; grid-template-columns:1fr; gap:1rem;
+  }
+  @media (min-width:720px){ .plugin-grid{grid-template-columns:1fr 1fr;} }
+
+  .plugin-card{
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:1.6rem;
+    display:flex; flex-direction:column; gap:0.7rem;
+    transition:border-color 0.2s ease, transform 0.2s ease;
+  }
+  .plugin-card:hover{border-color:var(--husk); transform:translateY(-2px);}
+  .plugin-card .tag{
+    font-family:'JetBrains Mono',monospace; font-size:0.7rem; letter-spacing:0.08em;
+    text-transform:uppercase; color:var(--husk-light);
+    width:fit-content; padding:0.2rem 0.55rem;
+    border:1px solid var(--line); border-radius:4px;
+  }
+  .plugin-card h3{font-size:1.1rem; color:var(--cream);}
+  .plugin-card p{font-size:0.87rem; color:var(--muted);}
+  .plugin-card .go{
+    margin-top:auto; font-family:'JetBrains Mono',monospace; font-size:0.82rem;
+    color:var(--kernel); text-decoration:none;
+  }
+  .plugin-card .go:hover{text-decoration:underline;}
+
+  .api-card{
+    background:var(--bg-panel-2);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:1.75rem;
+    display:flex; flex-wrap:wrap; gap:1.25rem;
+    align-items:center; justify-content:space-between;
+    margin-top:1.5rem;
+  }
+  .api-card h3{color:var(--cream); font-size:1.1rem; margin-bottom:0.3rem;}
+  .api-card p{color:var(--muted); font-size:0.87rem; max-width:38ch;}
+
+  .btn{
+    font-family:'JetBrains Mono',monospace; font-size:0.85rem;
+    padding:0.65rem 1.1rem; border-radius:7px; text-decoration:none;
+    display:inline-flex; align-items:center; gap:0.5rem;
+    transition:transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+    border:1px solid transparent;
+  }
+  .btn-primary{background:var(--kernel); color:#1a1706; font-weight:600;}
+  .btn-primary:hover{transform:translateY(-1px); background:#ffd24d;}
+  .btn-ghost{border-color:var(--line); color:var(--cream);}
+  .btn-ghost:hover{border-color:var(--husk-light); transform:translateY(-1px);}
+
+  .caution-note{
+    font-size:0.82rem; color:var(--muted);
+    border:1px dashed var(--line); border-radius:var(--radius);
+    padding:1rem 1.25rem; margin-top:2rem;
+  }
+
+  footer{border-top:1px solid var(--line); padding:2.5rem 0 3rem;}
+  .footer-row{display:flex; flex-wrap:wrap; gap:1rem; justify-content:space-between; align-items:center;}
+  footer .mono{font-size:0.8rem; color:var(--muted);}
+  footer .links{display:flex; gap:1.4rem;}
+  footer .links a{font-family:'JetBrains Mono',monospace; font-size:0.8rem; color:var(--muted); text-decoration:none;}
+  footer .links a:hover{color:var(--kernel);}
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="nav">
+    <a href="index.html" class="wordmark">CORN<em>UI</em></a>
+    <ul class="nav-links">
+      <li><a href="index.html#features">Features</a></li>
+      <li><a href="index.html#install">Install</a></li>
+      <li><a href="plugins.html">Plugins</a></li>
+      <li><a href="index.html#discord">Discord</a></li>
+      <li><a href="https://github.com/Ohiocteator22" target="_blank" rel="noopener">GitHub ↗</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+  <div class="wrap page-head">
+    <div class="eyebrow">Plugins</div>
+    <h1>Extend CornUi.</h1>
+    <p>Official plugins built on the CornUi plugin API, plus a tutorial if you want to write your own.</p>
+  </div>
+
+  <section>
+    <div class="wrap">
+      <div class="plugin-grid">
+        <div class="plugin-card">
+          <span class="tag">Official</span>
+          <h3>Dev Suite</h3>
+          <p>Developer-focused tools for building and debugging on top of CornUi.</p>
+          <a class="go" href="dev-suite.html">Documentation →</a>
+        </div>
+        <div class="plugin-card">
+          <span class="tag">Official</span>
+          <h3>Visual Suite</h3>
+          <p>Extra visual and cosmetic extras layered on the base UI.</p>
+          <a class="go" href="visual-suite.html">Documentation →</a>
+        </div>
+        <div class="plugin-card">
+          <span class="tag">Official</span>
+          <h3>Movement Suite</h3>
+          <p>Movement-related additions built through the plugin system.</p>
+          <a class="go" href="movement-suite.html">Documentation →</a>
+        </div>
+        <div class="plugin-card">
+          <span class="tag">Guide</span>
+          <h3>Plugin API Tutorial</h3>
+          <p>How to write and load your own plugin using Library:LoadPlugin.</p>
+          <a class="go" href="plugin-api.html">Read guide →</a>
+        </div>
+      </div>
+
+      <div class="caution-note">
+        These plugins live in a separate experimental repository. Check that repo's own README for scope and terms before using anything from it.
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap footer-row">
+    <span class="mono">Ohiocteator22 — Roblox scripting, mobile-first.</span>
+    <div class="links">
+      <a href="https://github.com/Ohiocteator22" target="_blank" rel="noopener">GitHub</a>
+      <a href="index.html">Home</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
