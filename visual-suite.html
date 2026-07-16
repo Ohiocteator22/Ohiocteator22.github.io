@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Visual Suite — CornUi Plugins</title>
+<meta name="description" content="Documentation for the CornUi Visual Suite plugin.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-deep:#12130f; --bg-panel:#191b14; --bg-panel-2:#1f221a;
+    --kernel:#f4c430; --kernel-dim:#c79f22; --husk:#7a8450; --husk-light:#a3ac74;
+    --cream:#ede6d3; --muted:#8b8a78; --line:#2c2e22; --radius:10px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){ *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;} }
+  body{background:var(--bg-deep); color:var(--cream); font-family:'Inter',sans-serif; line-height:1.6;}
+  h1,h2,h3,.wordmark{font-family:'Space Grotesk',sans-serif;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+  a{color:inherit;}
+  .wrap{max-width:860px; margin:0 auto; padding:0 1.5rem;}
+
+  header{position:sticky; top:0; z-index:20; background:rgba(18,19,15,0.85); backdrop-filter:blur(8px); border-bottom:1px solid var(--line);}
+  .nav{display:flex; align-items:center; justify-content:space-between; padding:1rem 1.5rem; max-width:1080px; margin:0 auto;}
+  .wordmark{font-size:1.15rem; font-weight:700; display:flex; gap:2px;}
+  .wordmark em{font-style:normal; color:var(--kernel);}
+  .nav-links{display:none; gap:1.75rem; list-style:none;}
+  @media (min-width:640px){ .nav-links{display:flex;} }
+  .nav-links a{font-family:'JetBrains Mono',monospace; font-size:0.82rem; color:var(--muted); text-decoration:none; transition:color 0.2s ease;}
+  .nav-links a:hover{color:var(--kernel);}
+
+  .crumb{
+    font-family:'JetBrains Mono',monospace; font-size:0.8rem; color:var(--muted);
+    padding:1.75rem 0 0.5rem; display:flex; gap:0.5rem; align-items:center;
+  }
+  .crumb a{color:var(--husk-light); text-decoration:none;}
+  .crumb a:hover{color:var(--kernel);}
+
+  .page-head{padding:0.5rem 0 2rem; border-bottom:1px solid var(--line);}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace; font-size:0.78rem; color:var(--husk-light);
+    text-transform:uppercase; letter-spacing:0.12em; margin-bottom:0.9rem;
+    display:flex; align-items:center; gap:0.6rem;
+  }
+  .eyebrow::before{content:''; width:8px; height:8px; background:var(--kernel); display:inline-block; border-radius:1px;}
+  .page-head h1{font-size:clamp(1.8rem,4.5vw,2.4rem); color:var(--cream);}
+  .page-head p{margin-top:0.8rem; color:var(--muted); max-width:60ch;}
+
+  article{padding:2.25rem 0 3.5rem;}
+  article h2{
+    font-size:1.25rem; color:var(--cream); margin:2.25rem 0 0.9rem;
+    padding-bottom:0.5rem; border-bottom:1px solid var(--line);
+  }
+  article h2:first-child{margin-top:0;}
+  article p{color:var(--muted); margin-bottom:0.9rem; max-width:66ch;}
+  article ul{margin:0 0 1rem 1.2rem; color:var(--muted);}
+  article li{margin-bottom:0.4rem;}
+  article li strong{color:var(--cream);}
+
+  .code-panel{
+    background:var(--bg-panel); border:1px solid var(--line); border-radius:var(--radius);
+    padding:1.2rem 1.4rem; font-family:'JetBrains Mono',monospace; font-size:0.85rem;
+    color:var(--husk-light); overflow-x:auto; margin:0.5rem 0 1.2rem;
+  }
+  .code-panel .fn{color:var(--kernel);}
+  .code-panel .str{color:var(--cream);}
+  .code-panel .cmt{color:var(--muted);}
+
+  .note{
+    font-size:0.85rem; color:var(--muted);
+    border:1px dashed var(--line); border-radius:var(--radius);
+    padding:0.9rem 1.1rem; margin-top:0.5rem;
+  }
+  .note strong{color:var(--husk-light);}
+
+  .btn{
+    font-family:'JetBrains Mono',monospace; font-size:0.85rem; padding:0.65rem 1.1rem;
+    border-radius:7px; text-decoration:none; display:inline-flex; align-items:center; gap:0.5rem;
+    border:1px solid var(--line); color:var(--cream); transition:transform 0.15s ease, border-color 0.15s ease;
+  }
+  .btn:hover{border-color:var(--husk-light); transform:translateY(-1px);}
+
+  footer{border-top:1px solid var(--line); padding:2.5rem 0 3rem;}
+  .footer-row{display:flex; flex-wrap:wrap; gap:1rem; justify-content:space-between; align-items:center;}
+  footer .mono{font-size:0.8rem; color:var(--muted);}
+  footer .links{display:flex; gap:1.4rem;}
+  footer .links a{font-family:'JetBrains Mono',monospace; font-size:0.8rem; color:var(--muted); text-decoration:none;}
+  footer .links a:hover{color:var(--kernel);}
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="nav">
+    <a href="index.html" class="wordmark">CORN<em>UI</em></a>
+    <ul class="nav-links">
+      <li><a href="index.html#features">Features</a></li>
+      <li><a href="index.html#install">Install</a></li>
+      <li><a href="plugins.html">Plugins</a></li>
+      <li><a href="index.html#discord">Discord</a></li>
+      <li><a href="https://github.com/Ohiocteator22" target="_blank" rel="noopener">GitHub ↗</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main class="wrap">
+  <div class="crumb"><a href="plugins.html">Plugins</a> <span>/</span> <span>Visual Suite</span></div>
+
+  <div class="page-head">
+    <div class="eyebrow">Official Plugin</div>
+    <h1>Visual Suite</h1>
+    <p>Cosmetic and visual extras layered on top of the base CornUi window — loaded through the standard plugin API.</p>
+  </div>
+
+  <article>
+    <h2>Load it</h2>
+    <p>Visual Suite loads like any other CornUi plugin, through <span class="mono">Library:LoadPlugin</span> with a raw URL pointing at the plugin's source file.</p>
+    <div class="code-panel">
+      <span class="cmt">-- after Corn and Window are set up</span><br>
+      Corn:<span class="fn">LoadPlugin</span>(<span class="str">'YOUR_RAW_VISUAL_SUITE_URL'</span>)
+    </div>
+    <div class="note"><strong>Placeholder:</strong> swap in the raw GitHub URL for Visual Suite once it's finalized in the plugins repo.</div>
+
+    <h2>Features</h2>
+    <ul>
+      <li><strong>Fill in:</strong> list the visual extras this suite adds (e.g. custom backgrounds, particle effects, extra theme presets).</li>
+      <li><strong>Fill in:</strong> any settings or toggles it exposes in the UI.</li>
+      <li><strong>Fill in:</strong> whether it interacts with the theme editor or reduced-motion toggle.</li>
+    </ul>
+
+    <h2>Notes</h2>
+    <p>Like all CornUi plugins, Visual Suite runs inside a pcall-wrapped context, so a failure inside the plugin won't crash the rest of the hub.</p>
+  </article>
+
+  <a class="btn" href="plugins.html">← Back to Plugins</a>
+</main>
+
+<footer>
+  <div class="wrap footer-row">
+    <span class="mono">Ohiocteator22 — Roblox scripting, mobile-first.</span>
+    <div class="links">
+      <a href="https://github.com/Ohiocteator22" target="_blank" rel="noopener">GitHub</a>
+      <a href="index.html">Home</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
