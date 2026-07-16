@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ohiocteator22 — CornUi &amp; Roblox Tooling</title>
+<meta name="description" content="CornUi — a mobile-first Roblox UI framework by Ohiocteator22 (Lifeless).">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-deep:#12130f;
+    --bg-panel:#191b14;
+    --bg-panel-2:#1f221a;
+    --kernel:#f4c430;
+    --kernel-dim:#c79f22;
+    --husk:#7a8450;
+    --husk-light:#a3ac74;
+    --cream:#ede6d3;
+    --muted:#8b8a78;
+    --line:#2c2e22;
+    --radius:10px;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
+  }
+
+  body{
+    background:var(--bg-deep);
+    color:var(--cream);
+    font-family:'Inter',sans-serif;
+    line-height:1.55;
+    overflow-x:hidden;
+  }
+
+  h1,h2,h3,.wordmark{font-family:'Space Grotesk',sans-serif;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+
+  a{color:inherit;}
+
+  /* Kernel grid — signature texture: staggered dots evoking rows on a corn cob */
+  .kernel-field{
+    position:absolute; inset:0;
+    background-image:
+      radial-gradient(circle, rgba(244,196,48,0.16) 1.4px, transparent 1.6px);
+    background-size:22px 26px;
+    background-position:0 0, 11px 13px;
+    mask-image:linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
+    pointer-events:none;
+  }
+  .kernel-field.row-b{
+    background-position:11px 13px;
+  }
+
+  .kernel-divider{
+    display:flex;
+    justify-content:center;
+    gap:6px;
+    padding:2.5rem 0;
+  }
+  .kernel-divider span{
+    width:6px; height:6px; border-radius:1px;
+    background:var(--husk);
+  }
+  .kernel-divider span:nth-child(3n){background:var(--kernel);}
+  .kernel-divider span:nth-child(4n){background:var(--kernel-dim);}
+
+  /* Layout */
+  .wrap{max-width:1080px; margin:0 auto; padding:0 1.5rem;}
+
+  header{
+    position:sticky; top:0; z-index:20;
+    background:rgba(18,19,15,0.85);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:1rem 1.5rem;
+    max-width:1080px; margin:0 auto;
+  }
+  .wordmark{
+    font-size:1.15rem; font-weight:700; letter-spacing:0.01em;
+    color:var(--cream);
+    display:flex; align-items:baseline; gap:2px;
+  }
+  .wordmark em{
+    font-style:normal; color:var(--kernel);
+  }
+  .nav-links{display:flex; gap:1.75rem; list-style:none;}
+  .nav-links a{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.82rem;
+    color:var(--muted);
+    text-decoration:none;
+    letter-spacing:0.02em;
+    transition:color 0.2s ease;
+  }
+  .nav-links a:hover, .nav-links a:focus-visible{color:var(--kernel);}
+  .nav-links{display:none;}
+  @media (min-width:640px){ .nav-links{display:flex;} }
+
+  /* Hero */
+  .hero{
+    position:relative;
+    padding:5.5rem 0 4.5rem;
+    overflow:hidden;
+  }
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.78rem;
+    color:var(--husk-light);
+    text-transform:uppercase;
+    letter-spacing:0.12em;
+    margin-bottom:1rem;
+    display:flex; align-items:center; gap:0.6rem;
+  }
+  .eyebrow::before{
+    content:'';
+    width:8px; height:8px;
+    background:var(--kernel);
+    display:inline-block;
+    border-radius:1px;
+  }
+  .hero h1{
+    font-size:clamp(2.3rem, 6vw, 3.6rem);
+    font-weight:700;
+    line-height:1.08;
+    max-width:14ch;
+    color:var(--cream);
+  }
+  .hero h1 .accent{color:var(--kernel);}
+  .hero p{
+    margin-top:1.4rem;
+    font-size:1.05rem;
+    color:var(--muted);
+    max-width:46ch;
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:2.5rem;
+    align-items:start;
+    position:relative;
+    z-index:1;
+  }
+  @media (min-width:800px){
+    .hero-grid{grid-template-columns:1.2fr 1fr;}
+  }
+
+  .terminal{
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    overflow:hidden;
+    box-shadow:0 20px 50px -20px rgba(0,0,0,0.6);
+  }
+  .terminal-bar{
+    display:flex; gap:6px;
+    padding:0.7rem 0.9rem;
+    border-bottom:1px solid var(--line);
+    background:var(--bg-panel-2);
+  }
+  .terminal-bar span{
+    width:9px; height:9px; border-radius:50%;
+    background:var(--line);
+  }
+  .terminal-body{
+    padding:1.2rem 1.1rem;
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.82rem;
+    color:var(--husk-light);
+    line-height:1.7;
+  }
+  .terminal-body .fn{color:var(--kernel);}
+  .terminal-body .str{color:var(--cream);}
+  .terminal-body .cmt{color:var(--muted);}
+
+  /* Buttons */
+  .btn-row{display:flex; flex-wrap:wrap; gap:0.85rem; margin-top:2rem;}
+  .btn{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.85rem;
+    padding:0.75rem 1.25rem;
+    border-radius:7px;
+    text-decoration:none;
+    display:inline-flex; align-items:center; gap:0.5rem;
+    transition:transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+    border:1px solid transparent;
+  }
+  .btn-primary{
+    background:var(--kernel);
+    color:#1a1706;
+    font-weight:600;
+  }
+  .btn-primary:hover{transform:translateY(-1px); background:#ffd24d;}
+  .btn-ghost{
+    border-color:var(--line);
+    color:var(--cream);
+  }
+  .btn-ghost:hover{border-color:var(--husk-light); transform:translateY(-1px);}
+
+  /* Sections */
+  section{padding:1rem 0 3rem;}
+  .section-head{max-width:60ch; margin-bottom:2.25rem;}
+  .section-head .eyebrow{margin-bottom:0.75rem;}
+  .section-head h2{font-size:clamp(1.5rem,3.5vw,2rem); color:var(--cream);}
+  .section-head p{color:var(--muted); margin-top:0.6rem;}
+
+  .feature-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    overflow:hidden;
+  }
+  @media (min-width:640px){ .feature-grid{grid-template-columns:1fr 1fr;} }
+  @media (min-width:960px){ .feature-grid{grid-template-columns:1fr 1fr 1fr 1fr;} }
+
+  .feature{
+    background:var(--bg-panel);
+    padding:1.5rem 1.35rem;
+    transition:background 0.2s ease;
+  }
+  .feature:hover{background:var(--bg-panel-2);}
+  .feature .dot{
+    width:7px; height:7px; border-radius:1px;
+    background:var(--husk); margin-bottom:0.9rem;
+  }
+  .feature h3{font-size:0.98rem; color:var(--cream); margin-bottom:0.4rem; font-weight:600;}
+  .feature p{font-size:0.85rem; color:var(--muted);}
+
+  /* Install */
+  .code-panel{
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:1.4rem 1.5rem;
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.85rem;
+    color:var(--husk-light);
+    overflow-x:auto;
+  }
+  .code-panel .fn{color:var(--kernel);}
+  .code-panel .str{color:var(--cream);}
+
+  /* Project cards */
+  .project-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:1rem;
+  }
+  @media (min-width:720px){ .project-grid{grid-template-columns:1fr 1fr;} }
+
+  .project-card{
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:1.6rem;
+    display:flex; flex-direction:column; gap:0.9rem;
+    transition:border-color 0.2s ease, transform 0.2s ease;
+  }
+  .project-card:hover{border-color:var(--husk); transform:translateY(-2px);}
+  .project-card .tag{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.7rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--husk-light);
+    width:fit-content;
+    padding:0.2rem 0.55rem;
+    border:1px solid var(--line);
+    border-radius:4px;
+  }
+  .project-card.caution .tag{color:var(--muted); border-color:var(--line);}
+  .project-card h3{font-size:1.15rem; color:var(--cream);}
+  .project-card p{font-size:0.88rem; color:var(--muted);}
+  .project-card .go{
+    margin-top:auto;
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.82rem;
+    color:var(--kernel);
+    text-decoration:none;
+  }
+  .project-card.caution .go{color:var(--husk-light);}
+  .project-card .go:hover{text-decoration:underline;}
+  .caution-note{
+    font-size:0.78rem;
+    color:var(--muted);
+    border-top:1px dashed var(--line);
+    padding-top:0.75rem;
+  }
+
+  /* Promo band */
+  .promo-band{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    overflow:hidden;
+  }
+  @media (min-width:720px){ .promo-band{grid-template-columns:repeat(4,1fr);} }
+  .promo-stat{
+    background:var(--bg-panel);
+    padding:1.5rem 1.35rem;
+  }
+  .promo-stat .big{
+    font-family:'Space Grotesk',sans-serif;
+    font-size:1.4rem; font-weight:700;
+    color:var(--kernel);
+    margin-bottom:0.3rem;
+  }
+  .promo-stat p{font-size:0.83rem; color:var(--muted);}
+
+  .promo-banner{
+    background:linear-gradient(120deg, var(--bg-panel) 0%, var(--bg-panel-2) 100%);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:2rem 1.75rem;
+    display:flex; flex-wrap:wrap; gap:1.5rem;
+    align-items:center; justify-content:space-between;
+    margin-top:1.75rem;
+  }
+  .promo-banner h3{color:var(--cream); font-size:1.2rem; margin-bottom:0.4rem;}
+  .promo-banner p{color:var(--muted); font-size:0.88rem; max-width:42ch;}
+
+  /* Discord */
+  .discord-card{
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:2.25rem;
+    display:flex; flex-wrap:wrap; gap:1.75rem;
+    align-items:center; justify-content:space-between;
+    position:relative;
+    overflow:hidden;
+  }
+  .discord-card::before{
+    content:'';
+    position:absolute; inset:0;
+    background-image:radial-gradient(circle, rgba(122,132,80,0.14) 1.4px, transparent 1.6px);
+    background-size:22px 26px;
+    pointer-events:none;
+  }
+  .discord-copy{position:relative; z-index:1; max-width:34ch;}
+  .discord-copy h3{color:var(--cream); font-size:1.3rem; margin-bottom:0.5rem;}
+  .discord-copy p{color:var(--muted); font-size:0.9rem;}
+  .discord-copy .mono{display:block; margin-top:0.75rem; color:var(--husk-light); font-size:0.82rem;}
+
+  footer{
+    border-top:1px solid var(--line);
+    padding:2.5rem 0 3rem;
+  }
+  .footer-row{
+    display:flex; flex-wrap:wrap; gap:1rem;
+    justify-content:space-between; align-items:center;
+  }
+  footer .mono{font-size:0.8rem; color:var(--muted);}
+  footer .links{display:flex; gap:1.4rem;}
+  footer .links a{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.8rem; color:var(--muted); text-decoration:none;
+  }
+  footer .links a:hover{color:var(--kernel);}
+
+  /* Reveal animation */
+  .reveal{
+    opacity:0; transform:translateY(14px);
+    animation:rise 0.7s ease forwards;
+  }
+  @keyframes rise{ to{opacity:1; transform:translateY(0);} }
+  .d1{animation-delay:0.05s;}
+  .d2{animation-delay:0.18s;}
+  .d3{animation-delay:0.3s;}
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="nav">
+    <a href="#top" class="wordmark">CORN<em>UI</em></a>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#install">Install</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#discord">Discord</a></li>
+      <li><a href="https://github.com/Ohiocteator22" target="_blank" rel="noopener">GitHub ↗</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+  <section class="hero" id="top">
+    <div class="kernel-field"></div>
+    <div class="wrap hero-grid">
+      <div class="reveal d1">
+        <div class="eyebrow">Roblox UI Framework</div>
+        <h1>Mobile-first UI,<br>built <span class="accent">kernel</span> by kernel.</h1>
+        <p>CornUi is a universal Roblox UI framework from Ohiocteator22 — built for phone and PC alike, with the simplicity of Orion and none of the UNC compiler headaches.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="#install">Get started</a>
+          <a class="btn btn-ghost" href="https://github.com/Ohiocteator22/CornUi_Mobile-PC-compatible" target="_blank" rel="noopener">View repo ↗</a>
+          <a class="btn btn-ghost" href="#" rel="noopener">Redirect to Plugins API</a>
+        </div>
+      </div>
+      <div class="reveal d2 terminal">
+        <div class="terminal-bar"><span></span><span></span><span></span></div>
+        <div class="terminal-body">
+          <div><span class="cmt">-- load the library</span></div>
+          <div>local Corn = <span class="fn">loadstring</span>(game:HttpGet(<span class="str">'https://raw.githubusercontent.com/Ohiocteator22/CornUi_Mobile-PC-compatible/refs/heads/main/CornUi.lua'</span>))()</div>
+          <br>
+          <div><span class="cmt">-- spin up a window</span></div>
+          <div>local Window = Corn:<span class="fn">CreateWindow</span>({</div>
+          <div>&nbsp;&nbsp;Name = <span class="str">'Corn Hub'</span>,</div>
+          <div>&nbsp;&nbsp;Icon = 80406291512141</div>
+          <div>})</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap"><div class="kernel-divider"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div></div>
+
+  <section id="features">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="eyebrow">What's inside</div>
+        <h2>A full toolkit, not just a window and a button.</h2>
+        <p>Everything scales automatically between phone and desktop, and every element ties into the same flag and theme systems.</p>
+      </div>
+      <div class="feature-grid reveal">
+        <div class="feature"><div class="dot"></div><h3>Mobile-first scaling</h3><p>Auto-scaling layout tuned for touch first, desktop second.</p></div>
+        <div class="feature"><div class="dot"></div><h3>Theme editor</h3><p>Live single-key recoloring across the whole UI, tween-free.</p></div>
+        <div class="feature"><div class="dot"></div><h3>Command palette</h3><p>Embedded in the title bar, with keyword + argument parsing.</p></div>
+        <div class="feature"><div class="dot"></div><h3>Flag manager</h3><p>Shared flag table with get/set and a FlagChanged event.</p></div>
+        <div class="feature"><div class="dot"></div><h3>Search</h3><p>Matches name, keywords, and description across every element.</p></div>
+        <div class="feature"><div class="dot"></div><h3>Notifications</h3><p>Color-coded toasts with a countdown bar.</p></div>
+        <div class="feature"><div class="dot"></div><h3>Spotlight &amp; backgrounds</h3><p>Image and video backdrops, plus element spotlighting.</p></div>
+        <div class="feature"><div class="dot"></div><h3>Plugin API</h3><p>Sandboxed plugin loading via a pcall-wrapped ctx closure.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap"><div class="kernel-divider"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div></div>
+
+  <section id="why">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="eyebrow">Why CornUi</div>
+        <h2>Built for the executor you're actually running.</h2>
+      </div>
+      <div class="promo-band reveal">
+        <div class="promo-stat"><div class="big">1 script</div><p>Same source runs on mobile and PC, no separate builds.</p></div>
+        <div class="promo-stat"><div class="big">0 UNC limits</div><p>loadstring workaround sidesteps line-length caps on strict compilers.</p></div>
+        <div class="promo-stat"><div class="big">Live</div><p>Theme editor recolors instantly, no tween, no reload.</p></div>
+        <div class="promo-stat"><div class="big">Shipping</div><p>Actively developed — plugin API and new widgets land regularly.</p></div>
+      </div>
+      <div class="promo-banner reveal">
+        <div>
+          <h3>Orion-simple. Built for phones first.</h3>
+          <p>If your last UI lib fought you on mobile, CornUi is the fix — same ease of use, none of the desktop-only assumptions.</p>
+        </div>
+        <a class="btn btn-primary" href="https://github.com/Ohiocteator22/CornUi_Mobile-PC-compatible" target="_blank" rel="noopener">Star on GitHub ↗</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap"><div class="kernel-divider"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div></div>
+
+  <section id="install">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="eyebrow">Install</div>
+        <h2>Two lines to a working window.</h2>
+        <p>Swap in your own raw script URL once it's hosted, then build out tabs and sections from there — full API in Documentation.md and Widgets.md.</p>
+      </div>
+      <div class="code-panel reveal">
+        local Corn = <span class="fn">loadstring</span>(game:HttpGet(<span class="str">'https://raw.githubusercontent.com/Ohiocteator22/CornUi_Mobile-PC-compatible/refs/heads/main/CornUi.lua'</span>))()<br>
+        local Window = Corn:<span class="fn">CreateWindow</span>({ Name = <span class="str">'Corn Hub'</span> })
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap"><div class="kernel-divider"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div></div>
+
+  <section id="projects">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="eyebrow">Projects</div>
+        <h2>What's public so far.</h2>
+      </div>
+      <div class="project-grid reveal">
+        <div class="project-card">
+          <span class="tag">Library</span>
+          <h3>CornUi</h3>
+          <p>The main UI framework — Window → Tab → Section → Elements, mobile-first, theme-aware.</p>
+          <a class="go" href="https://github.com/Ohiocteator22/CornUi_Mobile-PC-compatible" target="_blank" rel="noopener">View repository →</a>
+        </div>
+        <div class="project-card caution">
+          <span class="tag">Experimental</span>
+          <h3>CornUi — Experimental Plugins</h3>
+          <p>A separate plugin repo for CornUi. Not intended for general use.</p>
+          <a class="go" href="https://github.com/Ohiocteator22/CornUi-Experimental-Plugins-" target="_blank" rel="noopener">View repository →</a>
+          <div class="caution-note">See the repo's own README for scope and terms before using anything in it.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap"><div class="kernel-divider"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div></div>
+
+  <section id="discord">
+    <div class="wrap">
+      <div class="discord-card reveal">
+        <div class="discord-copy">
+          <h3>Join the Discord</h3>
+          <p>Bug reports, plugin requests, and updates on what's shipping next in CornUi.</p>
+          <span class="mono">discord.gg/69tnjKCmdM</span>
+        </div>
+        <a class="btn btn-primary" style="position:relative; z-index:1;" href="https://discord.gg/69tnjKCmdM" target="_blank" rel="noopener">Join server ↗</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap footer-row">
+    <span class="mono">Ohiocteator22 — Roblox scripting, mobile-first.</span>
+    <div class="links">
+      <a href="https://github.com/Ohiocteator22" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://discord.gg/69tnjKCmdM" target="_blank" rel="noopener">Discord</a>
+      <a href="#top">Back to top</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
