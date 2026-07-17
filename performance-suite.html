@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Movement Suite — CornUi Plugins</title>
-<meta name="description" content="Documentation for the CornUi Movement Suite plugin.">
+<title>Performance Suite — CornUi Plugins</title>
+<meta name="description" content="Documentation for the CornUi Performance Suite plugin.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -107,31 +107,31 @@
 </header>
 
 <main class="wrap">
-  <div class="crumb"><a href="plugins.html">Plugins</a> <span>/</span> <span>Movement Suite</span></div>
+  <div class="crumb"><a href="plugins.html">Plugins</a> <span>/</span> <span>Performance Suite</span></div>
 
   <div class="page-head">
     <div class="eyebrow">Official Plugin</div>
-    <h1>Movement Suite</h1>
-    <p>Movement-related additions built through the CornUi plugin system.</p>
+    <h1>Performance Suite</h1>
+    <p>Performance-related tooling and options for CornUi, loaded through the standard plugin API.</p>
   </div>
 
   <article>
     <h2>Load it</h2>
-    <p>Movement Suite loads like any other CornUi plugin, through <span class="mono">Library:LoadPlugin</span> with a raw URL pointing at the plugin's source file.</p>
+    <p>Performance Suite loads like any other CornUi plugin, through <span class="mono">Library:LoadPlugin</span> with a raw URL pointing at the plugin's source file.</p>
     <div class="code-panel">
       <span class="cmt">-- after Corn and Window are set up</span><br>
-      Corn:<span class="fn">LoadPlugin</span>(<span class="str">'https://raw.githubusercontent.com/Ohiocteator22/Corn-Ui-Reloaded/refs/heads/main/Plugins/MovementSuite.lua'</span>)
+      Corn:<span class="fn">LoadPlugin</span>(<span class="str">'https://raw.githubusercontent.com/Ohiocteator22/Corn-Ui-Reloaded/refs/heads/main/Plugins/DevSuite.lua'</span>)
     </div>
 
     <h2>Features</h2>
     <ul>
-      <li><strong>Fill in:</strong> list the movement features this suite adds.</li>
-      <li><strong>Fill in:</strong> any keybinds it registers.</li>
-      <li><strong>Fill in:</strong> any compatibility notes (game type, executor requirements, etc).</li>
+      <li><strong>Fill in:</strong> list the specific performance options this suite exposes (e.g. reduced-motion toggle, frame rate cap, intro animation skip).</li>
+      <li><strong>Fill in:</strong> any settings it exposes in the UI.</li>
+      <li><strong>Fill in:</strong> whether it depends on flags exposed by CornUi.lua itself (e.g. Library.Flags.ReducedMotion).</li>
     </ul>
 
     <h2>Notes</h2>
-    <p>Like all CornUi plugins, Movement Suite runs inside a pcall-wrapped context, so a failure inside the plugin won't crash the rest of the hub.</p>
+    <p>Like all CornUi plugins, Performance Suite runs inside a pcall-wrapped context, so a failure inside the plugin won't crash the rest of the hub.</p>
   </article>
 
   <a class="btn" href="plugins.html">← Back to Plugins</a>
