@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Key — CornUi</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-deep:#12130f; --bg-panel:#191b14; --kernel:#f4c430;
+    --husk-light:#a3ac74; --cream:#ede6d3; --muted:#8b8a78; --line:#2c2e22;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--bg-deep); color:var(--cream); font-family:'Inter',sans-serif;
+    min-height:100vh; display:flex; align-items:center; justify-content:center; padding:1.5rem;
+  }
+  .card{
+    background:var(--bg-panel); border:1px solid var(--line); border-radius:10px;
+    padding:2.25rem; max-width:420px; width:100%; text-align:center;
+  }
+  h1{font-family:'Space Grotesk',sans-serif; font-size:1.4rem; margin-bottom:0.75rem;}
+  p{color:var(--muted); font-size:0.9rem; margin-bottom:1.5rem;}
+  .key-box{
+    font-family:'JetBrains Mono',monospace; font-size:0.85rem; color:var(--kernel);
+    background:var(--bg-deep); border:1px solid var(--line); border-radius:7px;
+    padding:1rem; word-break:break-all; margin-bottom:1.25rem;
+  }
+  button{
+    font-family:'JetBrains Mono',monospace; font-size:0.85rem; font-weight:600;
+    background:var(--kernel); color:#1a1706; border:none; border-radius:7px;
+    padding:0.75rem 1.5rem; cursor:pointer; width:100%;
+  }
+  button:hover{background:#ffd24d;}
+  .note{margin-top:1rem; font-size:0.78rem; color:var(--husk-light);}
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1>Your key</h1>
+    <p>Copy this and paste it into the hub's key box. It expires in 24 hours.</p>
+    <div class="key-box" id="keyText">Generating...</div>
+    <button onclick="copyKey()">Copy Key</button>
+    <div class="note" id="status"></div>
+  </div>
+
+<script>
+  const WORKER_URL = "https://keysystem.chauhannityam-1512.workers.dev/";
+  let currentKey = "";
+
+  fetch(WORKER_URL + "/generate")
+    .then(r => r.json())
+    .then(data => {
+      currentKey = data.key;
+      document.getElementById("keyText").textContent = currentKey;
+    })
+    .catch(() => {
+      document.getElementById("keyText").textContent = "Failed to generate — refresh the page.";
+    });
+
+  function copyKey() {
+    if (!currentKey) return;
+    navigator.clipboard.writeText(currentKey).then(() => {
+      document.getElementById("status").textContent = "Copied!";
+    });
+  }
+</script>
+</body>
+</html>
