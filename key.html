@@ -45,12 +45,19 @@
   </div>
 
 <script>
-  const WORKER_URL = "https://keysystem.chauhannityam-1512.workers.dev";
+  const WORKER_URL = "https://YOUR-WORKER-SUBDOMAIN.workers.dev";
   let currentKey = "";
 
   fetch(WORKER_URL + "/generate")
-    .then(r => r.json())
+    .then(r => {
+      if (r.status === 403) {
+        document.getElementById("keyText").textContent = "Please complete the Linkvertise link to get a key.";
+        return null;
+      }
+      return r.json();
+    })
     .then(data => {
+      if (!data) return;
       currentKey = data.key;
       document.getElementById("keyText").textContent = currentKey;
     })
