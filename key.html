@@ -38,7 +38,7 @@
 <body>
   <div class="card">
     <h1>Your key</h1>
-    <p>Paste into the text box. Expires in: 24 hrs</p>
+    <p>Copy this and paste it into the hub's key box. It expires in 24 hours.</p>
     <div class="key-box" id="keyText">Generating...</div>
     <button onclick="copyKey()">Copy Key</button>
     <div class="note" id="status"></div>
@@ -48,10 +48,15 @@
   const WORKER_URL = "https://YOUR-WORKER-SUBDOMAIN.workers.dev";
   let currentKey = "";
 
-  fetch(WORKER_URL + "/generate")
+  // document.referrer reflects the page that sent the user here (Linkvertise/LootLabs).
+  // The Referer header on our own fetch() call below would NOT show that — it always
+  // shows this page's own origin — so we pass it explicitly instead.
+  const cameFrom = encodeURIComponent(document.referrer || "");
+
+  fetch(WORKER_URL + "/generate?ref=" + cameFrom)
     .then(r => {
       if (r.status === 403) {
-        document.getElementById("keyText").textContent = "Please complete the Linkvertise link to get a key.";
+        document.getElementById("keyText").textContent = "Please complete the Linkvertise or LootLabs link to get a key.";
         return null;
       }
       return r.json();
