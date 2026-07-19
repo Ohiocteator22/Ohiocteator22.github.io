@@ -38,22 +38,27 @@
 <body>
   <div class="card">
     <h1>Your key</h1>
-    <p>Copy this and paste it into the hub's key box. It expires in 24 hours.</p>
+    <p id="subtitle">Copy this and paste it into the hub's key box.</p>
     <div class="key-box" id="keyText">Generating...</div>
     <button onclick="copyKey()">Copy Key</button>
     <div class="note" id="status"></div>
   </div>
 
 <script>
-  const WORKER_URL = "https://keysystem.chauhannityam-1512.workers.dev";
+  const WORKER_URL = "https://YOUR-WORKER-SUBDOMAIN.workers.dev";
   let currentKey = "";
+
+  const TIER_LABELS = { "1day": "1 day", "3day": "3 days", "7day": "7 days" };
+  const tier = new URLSearchParams(window.location.search).get("tier") || "1day";
+  document.getElementById("subtitle").textContent =
+    "Copy this and paste it into the hub's key box. Valid for " + (TIER_LABELS[tier] || "1 day") + ".";
 
   // document.referrer reflects the page that sent the user here (Linkvertise/LootLabs).
   // The Referer header on our own fetch() call below would NOT show that — it always
   // shows this page's own origin — so we pass it explicitly instead.
   const cameFrom = encodeURIComponent(document.referrer || "");
 
-  fetch(WORKER_URL + "/generate?ref=" + cameFrom)
+  fetch(WORKER_URL + "/generate?ref=" + cameFrom + "&tier=" + encodeURIComponent(tier))
     .then(r => {
       if (r.status === 403) {
         document.getElementById("keyText").textContent = "Please complete the Linkvertise or LootLabs link to get a key.";
