@@ -22,7 +22,13 @@ const SCRIPTS = [
     rawUrl: "https://raw.githubusercontent.com/Ohiocteator22/Corn-Ui-Reloaded/refs/heads/main/Loader/KeySystem.lua",
     repoUrl: "https://github.com/Ohiocteator22/Corn-Ui-Reloaded",
   },
-
+  {
+    name: "Ninja Legends Autofarm",
+    description: "Ninja Legends Autofarm script|Corn Hub",
+    thumbnail: "assets/thumbnails/wmremove-transformed.png",
+    rawUrl: "https://raw.githubusercontent.com/Ohiocteator22/Corn-Ui-Reloaded/refs/heads/main/Scripts/Ninja%20Legends.lua",
+    repoUrl: "https://github.com/Ohiocteator22/Corn-Ui-Reloaded/blob/main/Scripts/Ninja%20Legends.lua",
+  },
   // Add more entries below, following the same shape:
   // {
   //   name: "Your Script Name",
