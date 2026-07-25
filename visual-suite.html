@@ -125,13 +125,13 @@
 
     <h2>Features</h2>
     <ul>
-      <li><strong>Fill in:</strong> list the visual extras this suite adds (e.g. custom backgrounds, particle effects, extra theme presets).</li>
-      <li><strong>Fill in:</strong> any settings or toggles it exposes in the UI.</li>
-      <li><strong>Fill in:</strong> whether it interacts with the theme editor or reduced-motion toggle.</li>
+      <li><strong>Custom theme presets</strong> — registers three extra full-palette themes (Midnight, Sunset, Forest) alongside CornUi's built-in Dark/Light, all switchable live from an Appearance tab's Theme dropdown.</li>
+      <li><strong>Background presets</strong> — a dropdown of ready-made backgrounds (image or video), plus a free-text "Custom ID" field that accepts any <span class="mono">rbxassetid</span> you own the rights to use.</li>
+      <li><strong>Clear Background</strong> — a button that resets to no background.</li>
     </ul>
 
     <h2>Notes</h2>
-    <p>Like all CornUi plugins, Visual Suite runs inside a pcall-wrapped context, so a failure inside the plugin won't crash the rest of the hub.</p>
+    <p>Like all CornUi plugins, Visual Suite runs inside a pcall-wrapped context, so a failure inside the plugin won't crash the rest of the hub. Theme registration goes through <span class="mono">RegisterTheme</span> (available even before a window exists), while theme switching and backgrounds go through the Window itself. It doesn't touch the reduced-motion flag — that's handled by Performance Suite.</p>
   </article>
 
   <a class="btn" href="plugins.html">← Back to Plugins</a>

@@ -120,18 +120,20 @@
     <p>Performance Suite loads like any other CornUi plugin, through <span class="mono">Library:LoadPlugin</span> with a raw URL pointing at the plugin's source file.</p>
     <div class="code-panel">
       <span class="cmt">-- after Corn and Window are set up</span><br>
-      Corn:<span class="fn">LoadPlugin</span>(<span class="str">'https://raw.githubusercontent.com/Ohiocteator22/Corn-Ui-Reloaded/refs/heads/main/Plugins/DevSuite.lua'</span>)
+      Corn:<span class="fn">LoadPlugin</span>(<span class="str">'https://raw.githubusercontent.com/Ohiocteator22/Corn-Ui-Reloaded/refs/heads/main/Plugins/PerformanceSuite.lua'</span>)
     </div>
 
     <h2>Features</h2>
     <ul>
-      <li><strong>Fill in:</strong> list the specific performance options this suite exposes (e.g. reduced-motion toggle, frame rate cap, intro animation skip).</li>
-      <li><strong>Fill in:</strong> any settings it exposes in the UI.</li>
-      <li><strong>Fill in:</strong> whether it depends on flags exposed by CornUi.lua itself (e.g. Library.Flags.ReducedMotion).</li>
+      <li><strong>Reduce UI Animations</strong> — sets <span class="mono">Library.Flags.ReducedMotion</span>, which gates CornUi.lua's own <span class="mono">tween()</span> helper and intro animation. Requires the ReducedMotion patch already built into CornUi.lua — this toggle can't disable animations from a plugin alone, since those helpers are local to CornUi.lua's closure.</li>
+      <li><strong>Blur</strong> — toggles a reusable <span class="mono">BlurEffect</span> in Lighting between size 0 and 24.</li>
+      <li><strong>Disable Particles</strong> — disables every <span class="mono">ParticleEmitter</span> and <span class="mono">Trail</span> in the Workspace, and keeps suppressing newly streamed-in ones while active.</li>
+      <li><strong>Low Graphics Mode</strong> — turns off GlobalShadows and post-processing effects (Bloom, SunRays, DepthOfField, ColorCorrection, Atmosphere), and drops the client's saved quality level to the lowest setting. Every original value is restored exactly when toggled back off.</li>
+      <li><strong>Streaming Optimization</strong> — tunes <span class="mono">StreamingMinRadius</span> / <span class="mono">StreamingTargetRadius</span> down for smoother streaming. Only does anything if the place already has <span class="mono">StreamingEnabled</span> — it can't turn streaming on at runtime, and the toggle will warn you if the place doesn't support it.</li>
     </ul>
 
     <h2>Notes</h2>
-    <p>Like all CornUi plugins, Performance Suite runs inside a pcall-wrapped context, so a failure inside the plugin won't crash the rest of the hub.</p>
+    <p>Like all CornUi plugins, Performance Suite runs inside a pcall-wrapped context, so a failure inside the plugin won't crash the rest of the hub. Flags used: <span class="mono">ReducedMotion</span>, <span class="mono">Blur</span>, <span class="mono">DisableParticles</span>, <span class="mono">LowGraphics</span>, <span class="mono">StreamingOptimization</span>.</p>
   </article>
 
   <a class="btn" href="plugins.html">← Back to Plugins</a>

@@ -125,13 +125,25 @@
 
     <h2>Features</h2>
     <ul>
-      <li><strong>Fill in:</strong> list the movement features this suite adds.</li>
-      <li><strong>Fill in:</strong> any keybinds it registers.</li>
-      <li><strong>Fill in:</strong> any compatibility notes (game type, executor requirements, etc).</li>
+      <li><strong>Walk Speed</strong> — slider from 1–200, applied to <span class="mono">Humanoid.WalkSpeed</span> and automatically re-applied on every respawn.</li>
+      <li><strong>Fly</strong> — toggle plus a Fly Speed slider (10–300). Steers off the camera's look/right vectors and reads <span class="mono">Humanoid.MoveDirection</span>, so it works identically with WASD, mobile thumbstick, or gamepad input — no per-platform branching needed. Re-engages automatically after a respawn.</li>
+      <li><strong>Noclip</strong> — disables collision on every <span class="mono">BasePart</span> in the character, and keeps watching for newly streamed-in parts (accessories, tools) so nothing suddenly collides again mid-noclip.</li>
+      <li><strong>Reset Character</strong> — a button that kills the humanoid to force an immediate respawn.</li>
+    </ul>
+
+    <h2>Command palette</h2>
+    <p>Every feature above is also wired into CornUi's command palette, and stays in sync with the UI tab through shared flags:</p>
+    <ul>
+      <li><span class="mono">speed &lt;n&gt;</span> — set walk speed.</li>
+      <li><span class="mono">fly [on|off]</span> — toggle fly.</li>
+      <li><span class="mono">flyspeed &lt;n&gt;</span> — set fly speed.</li>
+      <li><span class="mono">noclip [on|off]</span> — toggle noclip.</li>
+      <li><span class="mono">reset-char</span> — reset the character.</li>
     </ul>
 
     <h2>Notes</h2>
-    <p>Like all CornUi plugins, Movement Suite runs inside a pcall-wrapped context, so a failure inside the plugin won't crash the rest of the hub.</p>
+    <p>Like all CornUi plugins, Movement Suite runs inside a pcall-wrapped context, so a failure inside the plugin won't crash the rest of the hub. It also wraps its own respawn, fly-loop, and noclip logic individually — camera swaps, mid-fly deaths, and streamed-out parts fail safely instead of leaving a broken state behind.</p>
+    <p>Flags used: <span class="mono">Speed</span>, <span class="mono">Fly</span>, <span class="mono">FlySpeed</span>, <span class="mono">Noclip</span> — readable elsewhere with <span class="mono">ctx:GetFlag(name)</span> if another plugin needs to react to the same state.</p>
   </article>
 
   <a class="btn" href="plugins.html">← Back to Plugins</a>

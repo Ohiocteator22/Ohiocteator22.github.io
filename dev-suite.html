@@ -125,13 +125,22 @@
 
     <h2>Features</h2>
     <ul>
-      <li><strong>Fill in:</strong> list the specific dev tools this suite exposes (e.g. flag inspector, live element tree, performance overlay).</li>
-      <li><strong>Fill in:</strong> any keybinds or commands it registers.</li>
-      <li><strong>Fill in:</strong> whether it depends on other plugins or CornUi features.</li>
+      <li><strong>FPS meter</strong> — sampled every frame, shown as a 0.5s rolling average so the number doesn't flicker.</li>
+      <li><strong>Ping</strong> — read from <span class="mono">Stats.Network.ServerStatsItem["Data Ping"]</span>, polled once a second.</li>
+      <li><strong>Memory usage</strong> — total client memory in MB, polled once a second alongside ping.</li>
+      <li><strong>Rejoin Server</strong> — reconnects to the exact same server via <span class="mono">TeleportToPlaceInstance</span> with the current JobId, not a fresh matchmade one.</li>
+      <li><strong>Copy Job ID</strong> / <strong>Copy User ID</strong> — copies via <span class="mono">setclipboard()</span> when the executor supports it; otherwise the value is shown in a notification so it can still be read or screenshotted.</li>
+    </ul>
+
+    <h2>Command palette</h2>
+    <ul>
+      <li><span class="mono">rejoin</span> — rejoin the current server.</li>
+      <li><span class="mono">copy-jobid</span> — copy the current JobId.</li>
+      <li><span class="mono">copy-userid</span> — copy your UserId.</li>
     </ul>
 
     <h2>Notes</h2>
-    <p>Like all CornUi plugins, Dev Suite runs inside a pcall-wrapped context, so a failure inside the plugin won't crash the rest of the hub.</p>
+    <p>Like all CornUi plugins, Dev Suite runs inside a pcall-wrapped context, so a failure inside the plugin won't crash the rest of the hub. Stat polling stops automatically if the Developer tab is torn down, so it won't keep running against a dead UI in the background.</p>
   </article>
 
   <a class="btn" href="plugins.html">← Back to Plugins</a>
