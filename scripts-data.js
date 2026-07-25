@@ -12,16 +12,16 @@ const SCRIPTS = [
     name: "Ninja Legends Autofarm",
     description: "Ninja Legends Autofarm script|Corn Hub",
     thumbnail: "assets/thumbnails/wmremove-transformed.png",
-    rawUrl: "https://raw.githubusercontent.com/Ohiocteator22/Corn-Ui-Reloaded/refs/heads/main/Scripts/Ninja%20Legends.lua",
+    rawUrl: "loadstring(game:HttpGet('https://raw.githubusercontent.com/Ohiocteator22/Corn-Ui-Reloaded/refs/heads/main/Scripts/Ninja%20Legends.lua'))()",
     repoUrl: "https://github.com/Ohiocteator22/Corn-Ui-Reloaded/blob/main/Scripts/Ninja%20Legends.lua",
   },
 
   {
-    name: "Area 51 script",
-    description: "Area 51 script, Teleport to all weapons",
+    name: "Legends Of Speed Script",
+    description: "Legends Of Speed Autofarm",
     thumbnail: "assets/thumbnails/Your paragraph text.png",
-    rawUrl: "https://raw.githubusercontent.com/Ohiocteator22/Corn-Ui-Reloaded/refs/heads/main/Scripts/Area%2051.lua",
-    repoUrl: "https://github.com/Ohiocteator22/Corn-Ui-Reloaded/blob/main/Scripts/Area%2051.lua",
+    rawUrl: "loadstring(game:HttpGet('https://raw.githubusercontent.com/Ohiocteator22/Corn-Ui-Reloaded/refs/heads/main/Scripts/Legends%20of%20speed.lua'))()",
+    repoUrl: "https://github.com/Ohiocteator22/Corn-Ui-Reloaded/blob/main/Scripts/Legends%20of%20speed.lua",
   },
   // Add more entries below, following the same shape:
   // {
