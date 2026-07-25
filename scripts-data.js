@@ -8,26 +8,20 @@
 // repoUrl:   link to the actual GitHub repo/file (the "View source" button).
 
 const SCRIPTS = [
-  {
-    name: "CornUi",
-    description: "The main mobile-first UI framework.",
-    thumbnail: "",
-    rawUrl: "https://raw.githubusercontent.com/Ohiocteator22/Corn-Ui-Reloaded/refs/heads/main/Sourse/CornUi.lua",
-    repoUrl: "https://github.com/Ohiocteator22/Corn-Ui-Reloaded",
-  },
-  {
-    name: "KeySystem",
-    description: "Tiered key gate with Linkvertise + LootLabs support.",
-    thumbnail: "",
-    rawUrl: "https://raw.githubusercontent.com/Ohiocteator22/Corn-Ui-Reloaded/refs/heads/main/Loader/KeySystem.lua",
-    repoUrl: "https://github.com/Ohiocteator22/Corn-Ui-Reloaded",
-  },
-  {
+    {
     name: "Ninja Legends Autofarm",
     description: "Ninja Legends Autofarm script|Corn Hub",
     thumbnail: "assets/thumbnails/wmremove-transformed.png",
     rawUrl: "https://raw.githubusercontent.com/Ohiocteator22/Corn-Ui-Reloaded/refs/heads/main/Scripts/Ninja%20Legends.lua",
     repoUrl: "https://github.com/Ohiocteator22/Corn-Ui-Reloaded/blob/main/Scripts/Ninja%20Legends.lua",
+  },
+
+  {
+    name: "Area 51 script",
+    description: "Area 51 script, Teleport to all weapons",
+    thumbnail: "assets/thumbnails/Your paragraph text.png",
+    rawUrl: "https://raw.githubusercontent.com/Ohiocteator22/Corn-Ui-Reloaded/refs/heads/main/Scripts/Area%2051.lua",
+    repoUrl: "https://github.com/Ohiocteator22/Corn-Ui-Reloaded/blob/main/Scripts/Area%2051.lua",
   },
   // Add more entries below, following the same shape:
   // {
