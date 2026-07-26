@@ -30,6 +30,13 @@ const SCRIPTS = [
     rawUrl: "loadstring(game:HttpGet('https://raw.githubusercontent.com/Ohiocteator22/Corn-Ui-Reloaded/refs/heads/main/Scripts/Nullscape.lua'))()",
     repoUrl: "https://github.com/Ohiocteator22/Corn-Ui-Reloaded/blob/main/Scripts/Nullscape.lua",
   },
+  {
+    name: "Universal Aimlock Script",
+    description: "Supported games- FLICK, one Tap, Sniper Arena|No Gui|Open Sourced",
+    thumbnail: "",
+    rawUrl: "loadstring(game:HttpGet('https://raw.githubusercontent.com/Ohiocteator22/Corn-Ui-Reloaded/refs/heads/main/Scripts/Universal%20Aimlock.lua'))()",
+    repoUrl: "https://github.com/Ohiocteator22/Corn-Ui-Reloaded/blob/main/Scripts/Universal%20Aimlock.lua",
+  },
   // Add more entries below, following the same shape:
   // {
   //   name: "Your Script Name",
