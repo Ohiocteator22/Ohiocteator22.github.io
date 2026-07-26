@@ -23,6 +23,13 @@ const SCRIPTS = [
     rawUrl: "loadstring(game:HttpGet('https://raw.githubusercontent.com/Ohiocteator22/Corn-Ui-Reloaded/refs/heads/main/Scripts/Legends%20of%20speed.lua'))()",
     repoUrl: "https://github.com/Ohiocteator22/Corn-Ui-Reloaded/blob/main/Scripts/Legends%20of%20speed.lua",
   },
+  {
+    name: "Nullscape Script| Autofarm Gifts",
+    description: "AUtofarm Normal Gifts| Antivoid (DONT TOGGLE OFF ONCE ON)",
+    thumbnail: "",
+    rawUrl: "loadstring(game:HttpGet("https://raw.githubusercontent.com/Ohiocteator22/Corn-Ui-Reloaded/refs/heads/main/Scripts/Nullscape.lua"))()",
+    repoUrl: "https://github.com/Ohiocteator22/Corn-Ui-Reloaded/blob/main/Scripts/Nullscape.lua",
+  },
   // Add more entries below, following the same shape:
   // {
   //   name: "Your Script Name",
