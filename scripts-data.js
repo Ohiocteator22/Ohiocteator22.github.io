@@ -37,6 +37,20 @@ const SCRIPTS = [
     rawUrl: "loadstring(game:HttpGet('https://raw.githubusercontent.com/Ohiocteator22/Corn-Ui-Reloaded/refs/heads/main/Scripts/Universal%20Aimlock.lua'))()",
     repoUrl: "https://github.com/Ohiocteator22/Corn-Ui-Reloaded/blob/main/Scripts/Universal%20Aimlock.lua",
   },
+  {
+    name: "Tower Of Hell Script",
+    description: "Auto Finish | Reload on death",
+    thumbnail: "",
+    rawUrl: "loadstring(game:HttpGet('https://raw.githubusercontent.com/Ohiocteator22/Corn-Ui-Reloaded/refs/heads/main/Scripts/TowerOfHell.lua'))()",
+    repoUrl: "https://github.com/Ohiocteator22/Corn-Ui-Reloaded/blob/main/Scripts/TowerOfHell.lua",
+  },
+  {
+    name: "Universal Esp",
+    description: "universal Esp, supports all games",
+    thumbnail: "",
+    rawUrl: "loadstring(game:HttpGet('https://raw.githubusercontent.com/Ohiocteator22/Corn-Ui-Reloaded/refs/heads/main/Scripts/universal%20ESP.lua'))()",
+    repoUrl: "https://github.com/Ohiocteator22/Corn-Ui-Reloaded/blob/main/Scripts/universal%20ESP.lua",
+  },
   // Add more entries below, following the same shape:
   // {
   //   name: "Your Script Name",
