@@ -19,7 +19,7 @@
 </style>
 </head>
 <body>
-<header><div class="brand">CORN<b>UI</b> <small>SCRIPT BUILDER</small></div><div class="actions"><a class="btn" href="script-builder.html" download="CornUi_Script_Builder.html">Download HTML</a><button class="btn" id="reset">Reset project</button><button class="btn" id="download">Download Lua</button><button class="btn primary" id="copy">Copy code</button></div></header>
+<header><div class="brand">CORN<b>UI</b> <small>SCRIPT BUILDER</small></div><div class="actions"><a class="btn" href="CornUi_Script_Builder.html" download="CornUi_Script_Builder.html">Download HTML</a><button class="btn" id="reset">Reset project</button><button class="btn" id="download">Download Lua</button><button class="btn primary" id="copy">Copy code</button></div></header>
 <main class="app">
   <aside class="panel" aria-label="Component library"><div class="panel-title">Component library</div><div id="library"></div><p class="footer-note">Build in order: window → tab → section → element.</p></aside>
   <section class="panel" aria-label="Project tree"><div class="panel-title">Project hierarchy</div><div class="tree-wrap"><div id="tree" class="tree"></div></div><div id="properties" class="properties"></div></section>
@@ -41,10 +41,10 @@
   function make(type){const target=selected();let parent;
     if(type==='Tab') parent=state;
     else if(type==='Section') parent=target?.type==='Tab'?target:null;
-    else parent=target?.type==='Section'?target:null;
+    else parent=['Tab','Section'].includes(target?.type)?target:null;
     if(!parent)return; const node={id:'n'+nextId++,type,props:clone(defaults[type]),children:[]}; parent.children.push(node);selectedId=node.id;render();
   }
-  function available(type){const s=selected(); if(type==='Tab')return true; if(type==='Section')return s?.type==='Tab'; return s?.type==='Section'}
+  function available(type){const s=selected(); if(type==='Tab')return true; if(type==='Section')return s?.type==='Tab'; return ['Tab','Section'].includes(s?.type)}
   function library(){const parts=[['Window Settings',[['Window','Settings']]],['Structure',[['Tab','Add tab'],['Section','Add section']]],['Elements',elementTypes]];return parts.map(([heading,items])=>`<div class="library-group"><h2>${heading}</h2>${items.map(([type,label])=>`<button class="component" data-add="${type}" ${type==='Window'||available(type)?'':'disabled'}>${label}<span class="kind">+</span></button>`).join('')}</div>`).join('')}
   function treeNode(node,depth=0){const symbol=node.type==='Window'?'◆':node.type==='Tab'?'▰':node.type==='Section'?'▤':'·';return `<button class="tree-item ${node.id===selectedId?'selected':''}" data-select="${node.id}" style="--indent:${depth*18}px"><span class="indent"></span><span class="tree-icon">${symbol}</span><span class="tree-name">${esc(node.props.name||node.type)}</span><span class="tree-type">${node.type}</span></button>${node.children.map(n=>treeNode(n,depth+1)).join('')}`}
   const field=(key,label,value,type='text')=>`<div class="field"><label>${label}</label>${type==='textarea'?`<textarea data-prop="${key}">${esc(value||'')}</textarea>`:`<input type="${type}" data-prop="${key}" value="${esc(value||'')}">`}</div>`;
@@ -83,14 +83,15 @@
     const callbackArgs={Button:'',Toggle:'value',Slider:'value',Dropdown:'option',Textbox:'text, enterPressed',Keybind:'key','Color Picker':'color','Color Gradient':'sequence, colors'};if(Object.hasOwn(callbackArgs,n.type)){rows.push('    Callback = function('+callbackArgs[n.type]+')','        -- TODO:','        -- Add your '+n.type.toLowerCase()+' logic here','    end,')}rows.push('})');return rows.join('\n');
   }
   function lua(){let out=['local Corn = loadstring(game:HttpGet(', '    '+q(loader), '))()', '', 'local Window = Corn:CreateWindow({',line('Name',q(state.props.name)), '})'];
-    state.children.forEach((tab,ti)=>{const tv='Tab'+(ti+1);out.push('',`local ${tv} = Window:CreateTab(${q(tab.props.name)})`);tab.children.forEach(sec=>{const sv='Section'+(countSectionsBefore(tab,sec)+1);out.push('',`local ${sv} = ${tv}:CreateSection(${q(sec.props.name)})`);sec.children.forEach(el=>out.push('',elementCode(el,sv)))})});return out.join('\n')}
+    state.children.forEach((tab,ti)=>{const tv='Tab'+(ti+1);out.push('',`local ${tv} = Window:CreateTab(${q(tab.props.name)})`);tab.children.forEach(child=>{if(child.type!=='Section'){out.push('',elementCode(child,tv));return}const sv='Section'+(countSectionsBefore(tab,child)+1);out.push('',`local ${sv} = ${tv}:CreateSection(${q(child.props.name)})`);child.children.forEach(el=>out.push('',elementCode(el,sv)))})});return out.join('\n')}
   function countSectionsBefore(tab,sec){let n=0;for(const t of state.children){for(const s of t.children){if(s===sec)return n;n++}}return n}
   function esc(v){return String(v??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;')}
   function highlight(text){return esc(text).replace(/(local|function|end|true|false)/g,'<span class="kw">$1</span>').replace(/("(?:[^"\\]|\\.)*")/g,'<span class="str">$1</span>').replace(/(--[^\n]*)/g,'<span class="comment">$1</span>')}
   const currentCode=()=>rawMode?rawCode:lua();
-  function render(){document.getElementById('library').innerHTML=library();document.getElementById('tree').innerHTML=treeNode(state);document.getElementById('properties').innerHTML=props();const viewer=document.getElementById('code'),editor=document.getElementById('code-editor'),toggle=document.getElementById('raw-toggle');viewer.style.display=rawMode?'none':'block';editor.style.display=rawMode?'block':'none';document.getElementById('status').textContent=rawMode?'RAW EDIT':'LIVE';toggle.textContent=rawMode?'Use builder code':'Edit raw';if(rawMode){editor.value=rawCode}else viewer.innerHTML=highlight(lua())}
+  function refreshCode(){const viewer=document.getElementById('code'),editor=document.getElementById('code-editor'),toggle=document.getElementById('raw-toggle');viewer.style.display=rawMode?'none':'block';editor.style.display=rawMode?'block':'none';document.getElementById('status').textContent=rawMode?'RAW EDIT':'LIVE';toggle.textContent=rawMode?'Use builder code':'Edit raw';if(rawMode){editor.value=rawCode}else viewer.innerHTML=highlight(lua())}
+  function render(){document.getElementById('library').innerHTML=library();document.getElementById('tree').innerHTML=treeNode(state);document.getElementById('properties').innerHTML=props();refreshCode()}
   document.addEventListener('click',e=>{const add=e.target.closest('[data-add]');if(add){if(add.dataset.add!=='Window')make(add.dataset.add);return}const sel=e.target.closest('[data-select]');if(sel){selectedId=sel.dataset.select;render();return}if(e.target.id==='remove'){const p=parentOf(selectedId);if(p){p.children=p.children.filter(x=>x.id!==selectedId);selectedId=p.id;render()}return}if(e.target.id==='reset'){reset()}if(e.target.id==='raw-toggle'){if(!rawMode){rawCode=lua();rawMode=true}else rawMode=false;render()}if(e.target.id==='copy'){navigator.clipboard.writeText(currentCode()).then(()=>{e.target.textContent='Copied!';setTimeout(()=>e.target.textContent='Copy code',1200)}).catch(()=>alert('Copy failed. Select the generated code and copy it manually.'))}if(e.target.id==='download'){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([currentCode()],{type:'text/plain'}));a.download='CornUi_Script.lua';a.click();URL.revokeObjectURL(a.href)}});
-  document.addEventListener('input',e=>{if(e.target.id==='code-editor'){rawCode=e.target.value;return}if(!e.target.matches('[data-prop]'))return;selected().props[e.target.dataset.prop]=e.target.value;render()});
+  document.addEventListener('input',e=>{if(e.target.id==='code-editor'){rawCode=e.target.value;return}if(!e.target.matches('[data-prop]'))return;selected().props[e.target.dataset.prop]=e.target.value;refreshCode()});
   reset();
 })();
 </script>
