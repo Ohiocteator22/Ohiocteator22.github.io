@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CornUi Script Builder</title>
+<meta name="description" content="Build a CornUi Lua script scaffold visually.">
+<style>
+  :root{--bg:#12130f;--panel:#191b14;--panel2:#20231b;--line:#303326;--text:#ede6d3;--muted:#92907b;--yellow:#f4c430;--green:#a3ac74;--red:#e68070;--radius:10px}
+  *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font:14px/1.45 Inter,ui-sans-serif,system-ui,sans-serif} button,input,select,textarea{font:inherit} button{cursor:pointer}
+  header{height:60px;padding:0 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);background:rgba(18,19,15,.95);position:sticky;top:0;z-index:3}.brand{font-size:18px;font-weight:800;letter-spacing:.04em}.brand b{color:var(--yellow)}.brand small{color:var(--muted);font-size:11px;font-weight:500;margin-left:8px}.actions{display:flex;gap:8px}
+  .app{display:grid;grid-template-columns:255px minmax(290px,1fr) minmax(400px,1.15fr);height:calc(100vh - 60px);min-height:600px}.panel{min-width:0;overflow:auto;border-right:1px solid var(--line);background:var(--panel)}.panel:last-child{border:0;background:#151610}.panel-title{padding:18px 18px 12px;font:700 12px/1 ui-monospace,monospace;letter-spacing:.09em;text-transform:uppercase;color:var(--green)}
+  .library-group{padding:0 12px 16px}.library-group h2{font-size:12px;margin:12px 6px 8px;color:var(--muted);font-weight:600}.component{display:flex;width:100%;margin:4px 0;padding:9px 10px;text-align:left;color:var(--text);background:var(--panel2);border:1px solid var(--line);border-radius:7px;transition:.15s}.component:hover:not(:disabled){border-color:var(--green);transform:translateY(-1px)}.component:disabled{opacity:.36;cursor:not-allowed}.component .kind{margin-left:auto;color:var(--green);font:11px ui-monospace,monospace}
+  .tree-wrap{padding:0 14px 18px}.tree{padding:6px 0}.tree-item{width:100%;display:flex;align-items:center;gap:8px;text-align:left;padding:8px;border:1px solid transparent;border-radius:6px;background:transparent;color:var(--text)}.tree-item:hover{background:var(--panel2)}.tree-item.selected{background:#30331e;border-color:#5b6138}.indent{width:var(--indent)}.tree-icon{width:17px;color:var(--yellow);font-family:ui-monospace,monospace}.tree-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tree-type{margin-left:auto;color:var(--muted);font-size:11px}
+  .properties{border-top:1px solid var(--line);padding:16px 18px}.properties h2{font-size:14px;margin:0 0 12px}.field{margin:0 0 12px}.field label{display:block;margin:0 0 5px;color:var(--muted);font-size:12px}.field input,.field select,.field textarea{width:100%;padding:8px 9px;background:#11120e;border:1px solid var(--line);border-radius:6px;color:var(--text);outline:none}.field input:focus,.field textarea:focus{border-color:var(--yellow)}.field textarea{min-height:58px;resize:vertical}.hint{font-size:12px;color:var(--muted);margin:0}.remove{margin-top:8px;width:100%;padding:8px;border:1px solid #6a3e37;background:#2a1816;color:#f3b1a6;border-radius:6px}
+  .code-head{display:flex;align-items:center;justify-content:space-between;padding:18px;border-bottom:1px solid var(--line)}.code-head h1{font-size:15px;margin:0}.code-actions{display:flex;gap:8px;align-items:center}.status{font:11px ui-monospace,monospace;color:var(--green)}pre,#code-editor{margin:0;padding:20px;width:100%;min-height:calc(100% - 56px);white-space:pre;overflow:auto;color:#dde0c4;font:12.5px/1.65 ui-monospace,SFMono-Regular,Consolas,monospace;tab-size:2}#code-editor{display:none;resize:none;border:0;outline:0;background:#10110d;color:#dde0c4}.kw{color:#f4c430}.str{color:#d5e1a4}.comment{color:#7f806e}
+  .btn{border:1px solid var(--line);border-radius:7px;padding:8px 11px;background:var(--panel2);color:var(--text);font-size:12px}.btn:hover{border-color:var(--green)}.btn.primary{background:var(--yellow);border-color:var(--yellow);color:#292307;font-weight:700}.btn.danger{color:#f0a49b}.empty{padding:20px 8px;color:var(--muted);font-size:13px}.footer-note{padding:0 18px 18px;color:var(--muted);font-size:12px}
+  @media(max-width:900px){.app{grid-template-columns:220px 1fr;height:auto;min-height:calc(100vh - 60px)}.panel:last-child{grid-column:1/-1;border-top:1px solid var(--line);min-height:520px}.panel{min-height:640px}}@media(max-width:620px){header{padding:0 12px}.brand small{display:none}.actions .btn:not(.primary){display:none}.app{display:block}.panel{min-height:auto;border-right:0;border-bottom:1px solid var(--line)}.panel:last-child{min-height:480px}.library-group{display:flex;flex-wrap:wrap;gap:5px}.library-group h2{width:100%}.component{width:auto;margin:0}.component .kind{display:none}}
+</style>
+</head>
+<body>
+<header><div class="brand">CORN<b>UI</b> <small>SCRIPT BUILDER</small></div><div class="actions"><a class="btn" href="script-builder.html" download="CornUi_Script_Builder.html">Download HTML</a><button class="btn" id="reset">Reset project</button><button class="btn" id="download">Download Lua</button><button class="btn primary" id="copy">Copy code</button></div></header>
+<main class="app">
+  <aside class="panel" aria-label="Component library"><div class="panel-title">Component library</div><div id="library"></div><p class="footer-note">Build in order: window → tab → section → element.</p></aside>
+  <section class="panel" aria-label="Project tree"><div class="panel-title">Project hierarchy</div><div class="tree-wrap"><div id="tree" class="tree"></div></div><div id="properties" class="properties"></div></section>
+  <section class="panel" aria-label="Generated Lua code"><div class="code-head"><h1>Generated Lua</h1><div class="code-actions"><span class="status" id="status">LIVE</span><button class="btn" id="raw-toggle">Edit raw</button></div></div><pre id="code" aria-live="polite"></pre><textarea id="code-editor" spellcheck="false" aria-label="Editable raw Lua code"></textarea></section>
+</main>
+<script>
+(() => {
+  const loader = 'https://raw.githubusercontent.com/Ohiocteator22/Corn-Ui-Reloaded/refs/heads/main/Sourse/CornUi.lua';
+  const elementTypes = [
+    ['Button','CreateButton'],['Toggle','CreateToggle'],['Slider','CreateSlider'],['Dropdown','CreateDropdown'],['Textbox','CreateTextbox'],['Keybind','CreateKeybind'],['Color Picker','CreateColorPicker'],['Label','CreateLabel'],['Card','CreateCard'],['Paragraph','CreateParagraph'],['Image','CreateImage'],['Progress Bar','CreateProgressBar'],['Keybind List','CreateKeybindList'],['Color Gradient','CreateColorGradient'],['Notification Center','CreateNotificationCenter'],['Plugin Manager','CreatePluginManager'],['Search','CreateSearch'],['Theme Editor','CreateThemeEditor'],['Discord Button','CreateDiscordButton'],['Divider','CreateDivider']
+  ];
+  const defaults = {Window:{name:'My Hub'},Tab:{name:'Main'},Section:{name:'Settings'},Button:{name:'Start Button'},Toggle:{name:'Enabled',default:'false',flag:'Enabled'},Slider:{name:'Amount',min:'0',max:'100',default:'50',flag:'Amount'},Dropdown:{name:'Select option',options:'Option 1, Option 2',default:'Option 1',flag:'SelectOption'},Textbox:{name:'Input',default:'',placeholder:'Type here...',flag:'Input'},Keybind:{name:'Keybind',defaultKey:'F',flag:'ActionKey'},'Color Picker':{name:'Color',defaultColor:'#ffffff',flag:'Color'},Label:{name:'Label'},Card:{title:'Card',subtitle:''},Paragraph:{title:'Paragraph',text:'Write a helpful description here.'},Image:{name:'Image',image:'123456789',height:'140',scaleType:'Fit'},'Progress Bar':{name:'Loading',min:'0',max:'100',default:'50',flag:'Loading'},'Keybind List':{name:'Keybind List'},'Color Gradient':{name:'Color Gradient',stops:'#f4c430, #a3ac74',flag:'Gradient'},'Notification Center':{name:'Notifications'},'Plugin Manager':{name:'Plugins'},Search:{placeholder:'Search...'},'Theme Editor':{title:'Theme Editor',uiColorName:'Background',toggleColorName:'Toggle'},'Discord Button':{name:'Join Discord',invite:'discord.gg/'},Divider:{name:'Divider'}};
+  let nextId=1, state, selectedId, rawMode=false, rawCode='';
+  const clone=x=>JSON.parse(JSON.stringify(x));
+  function reset(){nextId=1;state={id:'window',type:'Window',props:clone(defaults.Window),children:[]};selectedId='window';rawMode=false;rawCode='';render()}
+  const find=(id,node=state)=>node.id===id?node:(node.children||[]).map(x=>find(id,x)).find(Boolean);
+  const parentOf=(id,node=state,parent=null)=>node.id===id?parent:(node.children||[]).map(x=>parentOf(id,x,node)).find(x=>x!==undefined);
+  function selected(){return find(selectedId)}
+  function make(type){const target=selected();let parent;
+    if(type==='Tab') parent=state;
+    else if(type==='Section') parent=target?.type==='Tab'?target:null;
+    else parent=target?.type==='Section'?target:null;
+    if(!parent)return; const node={id:'n'+nextId++,type,props:clone(defaults[type]),children:[]}; parent.children.push(node);selectedId=node.id;render();
+  }
+  function available(type){const s=selected(); if(type==='Tab')return true; if(type==='Section')return s?.type==='Tab'; return s?.type==='Section'}
+  function library(){const parts=[['Window Settings',[['Window','Settings']]],['Structure',[['Tab','Add tab'],['Section','Add section']]],['Elements',elementTypes]];return parts.map(([heading,items])=>`<div class="library-group"><h2>${heading}</h2>${items.map(([type,label])=>`<button class="component" data-add="${type}" ${type==='Window'||available(type)?'':'disabled'}>${label}<span class="kind">+</span></button>`).join('')}</div>`).join('')}
+  function treeNode(node,depth=0){const symbol=node.type==='Window'?'◆':node.type==='Tab'?'▰':node.type==='Section'?'▤':'·';return `<button class="tree-item ${node.id===selectedId?'selected':''}" data-select="${node.id}" style="--indent:${depth*18}px"><span class="indent"></span><span class="tree-icon">${symbol}</span><span class="tree-name">${esc(node.props.name||node.type)}</span><span class="tree-type">${node.type}</span></button>${node.children.map(n=>treeNode(n,depth+1)).join('')}`}
+  const field=(key,label,value,type='text')=>`<div class="field"><label>${label}</label>${type==='textarea'?`<textarea data-prop="${key}">${esc(value||'')}</textarea>`:`<input type="${type}" data-prop="${key}" value="${esc(value||'')}">`}</div>`;
+  function props(){const n=selected();if(!n)return '';let html=`<h2>${n.type} properties</h2>`;const p=n.props;
+    if(n.type==='Window'||n.type==='Tab'||n.type==='Section'||['Button','Label','Keybind List','Notification Center','Plugin Manager','Divider'].includes(n.type))html+=field('name','Name',p.name);
+    else if(n.type==='Card')html+=field('title','Title',p.title)+field('subtitle','Subtitle',p.subtitle);
+    else if(n.type==='Paragraph')html+=field('title','Title',p.title)+field('text','Text',p.text,'textarea');
+    else if(n.type==='Image')html+=field('name','Name',p.name)+field('image','Image asset ID',p.image)+field('height','Height',p.height,'number')+`<div class="field"><label>Scale Type</label><select data-prop="scaleType"><option ${p.scaleType==='Fit'?'selected':''}>Fit</option><option ${p.scaleType==='Crop'?'selected':''}>Crop</option><option ${p.scaleType==='Stretch'?'selected':''}>Stretch</option></select></div>`;
+    else if(n.type==='Progress Bar')html+=field('name','Name',p.name)+field('min','Min',p.min,'number')+field('max','Max',p.max,'number')+field('default','Default',p.default,'number')+field('flag','Flag',p.flag);
+    else if(n.type==='Search')html+=field('placeholder','Placeholder',p.placeholder);
+    else if(n.type==='Theme Editor')html+=field('title','Title',p.title)+field('uiColorName','UI Color Name',p.uiColorName)+field('toggleColorName','Toggle Color Name',p.toggleColorName);
+    else if(n.type==='Discord Button')html+=field('name','Name',p.name)+field('invite','Invite',p.invite);
+    else if(n.type==='Color Gradient')html+=field('name','Name',p.name)+field('stops','Stops (hex colors, comma separated)',p.stops)+field('flag','Flag',p.flag);
+    else if(n.type==='Toggle')html+=field('name','Name',p.name)+`<div class="field"><label>Default</label><select data-prop="default"><option value="false" ${p.default==='false'?'selected':''}>false</option><option value="true" ${p.default==='true'?'selected':''}>true</option></select></div>`+field('flag','Flag',p.flag);
+    else if(n.type==='Slider')html+=field('name','Name',p.name)+field('min','Min',p.min,'number')+field('max','Max',p.max,'number')+field('default','Default',p.default,'number')+field('flag','Flag',p.flag);
+    else if(n.type==='Dropdown')html+=field('name','Name',p.name)+field('options','Options (comma separated)',p.options)+field('default','Default option',p.default)+field('flag','Flag',p.flag);
+    else if(n.type==='Textbox')html+=field('name','Name',p.name)+field('default','Default',p.default)+field('placeholder','Placeholder',p.placeholder)+field('flag','Flag',p.flag);
+    else if(n.type==='Keybind')html+=field('name','Name',p.name)+field('defaultKey','Default Key',p.defaultKey)+field('flag','Flag',p.flag);
+    else if(n.type==='Color Picker')html+=field('name','Name',p.name)+field('defaultColor','Default Color',p.defaultColor,'color')+field('flag','Flag',p.flag);
+    if(n.type!=='Window')html+='<button class="remove" id="remove">Remove selected item</button>';return html;
+  }
+  const q=s=>'"'+String(s??'').replaceAll('\\','\\\\').replaceAll('"','\\"').replaceAll('\n','\\n')+'"';
+  const line=(key,val,indent='    ')=>`${indent}${key} = ${val},`;
+  const color3=hex=>{const value=String(hex||'').replace('#','');const safe=/^[0-9a-fA-F]{6}$/.test(value)?value:'ffffff';return `Color3.fromRGB(${parseInt(safe.slice(0,2),16)}, ${parseInt(safe.slice(2,4),16)}, ${parseInt(safe.slice(4,6),16)})`};
+  function elementCode(n,section){const p=n.props, api=elementTypes.find(x=>x[0]===n.type)?.[1]||'Create'+n.type.replaceAll(' ','');
+    if(n.type==='Label')return `${section}:CreateLabel(${q(p.name)})`;
+    let rows=[`${section}:${api}({`];
+    const addName=()=>rows.push(line('Name',q(p.name)));
+    if(n.type==='Card')rows.push(line('Title',q(p.title)),...(p.subtitle?[line('Subtitle',q(p.subtitle))]:[]));
+    else if(n.type==='Paragraph')rows.push(line('Title',q(p.title)),line('Text',q(p.text)));
+    else if(n.type==='Image')rows.push(line('Image',p.image||'0'),line('Name',q(p.name)),line('Height',p.height||'140'),line('ScaleType',q(p.scaleType)));
+    else if(n.type==='Search')rows.push(line('Placeholder',q(p.placeholder)));
+    else if(n.type==='Theme Editor')rows.push(line('Title',q(p.title)),line('UIColorName',q(p.uiColorName)),line('ToggleColorName',q(p.toggleColorName)));
+    else if(n.type==='Color Gradient')rows.push(line('Name',q(p.name)),line('Stops','{ '+p.stops.split(',').map(x=>color3(x.trim())).join(', ')+' }'),line('Flag',q(p.flag)));
+    else {addName();if(n.type==='Toggle')rows.push(line('Default',p.default),line('Flag',q(p.flag)));if(n.type==='Slider'||n.type==='Progress Bar')rows.push(line('Min',p.min),line('Max',p.max),line('Default',p.default),line('Flag',q(p.flag)));if(n.type==='Dropdown')rows.push(line('Options','{ '+p.options.split(',').map(x=>q(x.trim())).join(', ')+' }'),line('Default',q(p.default)),line('Flag',q(p.flag)));if(n.type==='Textbox')rows.push(line('Default',q(p.default)),line('Placeholder',q(p.placeholder)),line('Flag',q(p.flag)));if(n.type==='Keybind')rows.push(line('Default','Enum.KeyCode.'+String(p.defaultKey||'F').replace('Enum.KeyCode.','')),line('Flag',q(p.flag)));if(n.type==='Color Picker')rows.push(line('Default',color3(p.defaultColor)),line('Flag',q(p.flag)));if(n.type==='Discord Button')rows.push(line('Invite',q(p.invite)))}
+    const callbackArgs={Button:'',Toggle:'value',Slider:'value',Dropdown:'option',Textbox:'text, enterPressed',Keybind:'key','Color Picker':'color','Color Gradient':'sequence, colors'};if(Object.hasOwn(callbackArgs,n.type)){rows.push('    Callback = function('+callbackArgs[n.type]+')','        -- TODO:','        -- Add your '+n.type.toLowerCase()+' logic here','    end,')}rows.push('})');return rows.join('\n');
+  }
+  function lua(){let out=['local Corn = loadstring(game:HttpGet(', '    '+q(loader), '))()', '', 'local Window = Corn:CreateWindow({',line('Name',q(state.props.name)), '})'];
+    state.children.forEach((tab,ti)=>{const tv='Tab'+(ti+1);out.push('',`local ${tv} = Window:CreateTab(${q(tab.props.name)})`);tab.children.forEach(sec=>{const sv='Section'+(countSectionsBefore(tab,sec)+1);out.push('',`local ${sv} = ${tv}:CreateSection(${q(sec.props.name)})`);sec.children.forEach(el=>out.push('',elementCode(el,sv)))})});return out.join('\n')}
+  function countSectionsBefore(tab,sec){let n=0;for(const t of state.children){for(const s of t.children){if(s===sec)return n;n++}}return n}
+  function esc(v){return String(v??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;')}
+  function highlight(text){return esc(text).replace(/(local|function|end|true|false)/g,'<span class="kw">$1</span>').replace(/("(?:[^"\\]|\\.)*")/g,'<span class="str">$1</span>').replace(/(--[^\n]*)/g,'<span class="comment">$1</span>')}
+  const currentCode=()=>rawMode?rawCode:lua();
+  function render(){document.getElementById('library').innerHTML=library();document.getElementById('tree').innerHTML=treeNode(state);document.getElementById('properties').innerHTML=props();const viewer=document.getElementById('code'),editor=document.getElementById('code-editor'),toggle=document.getElementById('raw-toggle');viewer.style.display=rawMode?'none':'block';editor.style.display=rawMode?'block':'none';document.getElementById('status').textContent=rawMode?'RAW EDIT':'LIVE';toggle.textContent=rawMode?'Use builder code':'Edit raw';if(rawMode){editor.value=rawCode}else viewer.innerHTML=highlight(lua())}
+  document.addEventListener('click',e=>{const add=e.target.closest('[data-add]');if(add){if(add.dataset.add!=='Window')make(add.dataset.add);return}const sel=e.target.closest('[data-select]');if(sel){selectedId=sel.dataset.select;render();return}if(e.target.id==='remove'){const p=parentOf(selectedId);if(p){p.children=p.children.filter(x=>x.id!==selectedId);selectedId=p.id;render()}return}if(e.target.id==='reset'){reset()}if(e.target.id==='raw-toggle'){if(!rawMode){rawCode=lua();rawMode=true}else rawMode=false;render()}if(e.target.id==='copy'){navigator.clipboard.writeText(currentCode()).then(()=>{e.target.textContent='Copied!';setTimeout(()=>e.target.textContent='Copy code',1200)}).catch(()=>alert('Copy failed. Select the generated code and copy it manually.'))}if(e.target.id==='download'){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([currentCode()],{type:'text/plain'}));a.download='CornUi_Script.lua';a.click();URL.revokeObjectURL(a.href)}});
+  document.addEventListener('input',e=>{if(e.target.id==='code-editor'){rawCode=e.target.value;return}if(!e.target.matches('[data-prop]'))return;selected().props[e.target.dataset.prop]=e.target.value;render()});
+  reset();
+})();
+</script>
+</body>
+</html>
