@@ -51,6 +51,13 @@ const SCRIPTS = [
     rawUrl: "loadstring(game:HttpGet('https://raw.githubusercontent.com/Ohiocteator22/Corn-Ui-Reloaded/refs/heads/main/Scripts/universal%20ESP.lua'))()",
     repoUrl: "https://github.com/Ohiocteator22/Corn-Ui-Reloaded/blob/main/Scripts/universal%20ESP.lua",
   },
+  {
+    name: "GEF SCRIPT",
+    description: "Roblox Gef script v1.0, get all items",
+    thumbnail: "",
+    rawUrl: "loadstring(game:HttpGet('https://raw.githubusercontent.com/Ohiocteator22/Corn-Ui-Reloaded/refs/heads/main/Scripts/GEF.lua'))()",
+    repoUrl: "https://raw.githubusercontent.com/Ohiocteator22/Corn-Ui-Reloaded/refs/heads/main/Scripts/GEF.lua",
+  },
   // Add more entries below, following the same shape:
   // {
   //   name: "Your Script Name",
